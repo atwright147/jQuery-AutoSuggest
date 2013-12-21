@@ -13,41 +13,82 @@
  * Changelog: 
  * ---------------------
  * (c) 2010, http://www.mikestowe.com
- */ 
+ */
 
-autosuggest_min_length = 3; // Minimum characters before running ajax check
+/*!
+* jQuery Plugin vX.X
+* https://github.com/atwright147/jquery.plugin-name
+*
+* Copyright 2012, Andy Wright
+* Dual licensed under the MIT or GPL Version 2 licenses.
+* http://www.opensource.org/licenses/mit-license.php
+* http://www.opensource.org/licenses/GPL-2.0
+*/
 
-jQuery.fn.autosuggest = function() {
-  return this.each(function(){
-      var id = $(this).attr('id');
-       var offset = $(this).offset();
-    var left = offset.left;
-    if($(this).height() == 0) { var height = 30; } else { var height = $(this).height() + 5; }
-    if($(this).width() == 0) { var width = 200; } else { var width = $(this).width() + 5; }
-    var top = offset.top + height;
-    document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
-    $(this).keyup(
-        function() {
-                if($('#'+id).val().length > autosuggest_min_length) {
-                $.ajax({
-               url: $('#'+id).attr('rel'),
-               data: {q: $('#'+id).val()},
-               success: function(data) {
-                 if(data.length > 0) {
-                        var ret = '';
-                        var pairs = data.split('|');
-                        for(var i in pairs){
-                            ret += '<a href="javascript: void(0);" onclick="$(\'#'+id+'\').val(\''+pairs[i]+'\'); $(\'#autosuggest_'+id+'\').hide();">'+pairs[i]+'</a>';
-                        }
-                        $('#autosuggest_'+id).html(ret).show();
-                    } else {
-                        $('#autosuggest_'+id).hide();
-                    }
-               }
-                });
-            } else {
-                $('#autosuggest_'+id).hide();
-            }
-        }); 
-  });
-};
+(function($){
+
+	jQuery.fn.autosuggest = function(options) {
+
+		// Create some defaults, extending them with any options that were provided
+		var settings = $.extend({
+			'minLength' : 3,
+			'restful'   : true,
+			'dataType'  : null  // intelegent auto-guess 
+		}, options);
+
+		var o = settings;
+		//console.debug(settings);
+
+		console.info('autosuggest started');
+		console.info('selector:', this);
+		console.info('options:', o);
+
+		return this.each(function() {
+
+			var id = $(this).attr('id');
+			var offset = $(this).offset();
+			var left = offset.left;
+
+
+			if($(this).height() == 0) {
+				var height = 30;
+			} else {
+				var height = $(this).height() + 5;
+			}
+			if($(this).width() == 0) {
+				var width = 200;
+			} else {
+				var width = $(this).width() + 5;
+			}
+
+			var top = offset.top + height;
+
+			document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
+			
+			$(this).keyup(function() {
+				if($('#'+id).val().length >= o.minLength) {
+					$.ajax({
+						url: $('#'+id).attr('rel'),
+						//data: {q: $('#'+id).val()},  // TODO: make into an option
+						success: function(data) {
+							if(data.length > 0) {
+								var ret = '';
+								var pairs = data.split('|');
+								for(var i in pairs){
+									ret += '<a href="javascript: void(0);" onclick="$(\'#'+id+'\').val(\''+pairs[i]+'\'); $(\'#autosuggest_'+id+'\').hide();">'+pairs[i]+'</a>';
+								}
+								$('#autosuggest_'+id).html(ret).show();
+							} else {
+								$('#autosuggest_'+id).hide();
+							}
+						}
+					});
+				} else {
+					$('#autosuggest_'+id).hide();
+				}
+			});
+		});
+	};
+
+})(jQuery);
+
