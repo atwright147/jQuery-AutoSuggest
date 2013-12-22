@@ -5,11 +5,20 @@
 	<title>AutoSuggest Demo</title>
 </head>
 <body>
-	<input type="text" id="autosuggest" rel="data.json">
+	<input type="text" id="autosuggest1" rel="data.json">
+	
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="jquery.autosuggest.js"></script>
 	<script>
-		$('#autosuggest').autosuggest();
+		$.fn.autosuggest.parse = function(data) { 
+			var $out = $('<ul/>');
+			//$out.append()
+			$.map(data, function(v,i) {
+				$out.append('<li data-id="' + v.id + '">' + v.email + '</li>')
+			});
+			return $out;
+		};
+		$('#autosuggest1').autosuggest();
 	</script>
 </body>
 </html>

@@ -25,9 +25,10 @@
 * http://www.opensource.org/licenses/GPL-2.0
 */
 
-(function($){
+;(function($) {
+	'use strict';
 
-	jQuery.fn.autosuggest = function(options) {
+	$.fn.autosuggest = function(options) {
 
 		// Create some defaults, extending them with any options that were provided
 		var settings = $.extend({
@@ -39,44 +40,51 @@
 		var o = settings;
 		//console.debug(settings);
 
-		console.info('autosuggest started');
-		console.info('selector:', this);
-		console.info('options:', o);
+		console.groupCollapsed('Init');
+			console.info('autosuggest started');
+			console.info('selector:', this);
+			console.info('options:', o);
+		console.groupEnd();
 
 		return this.each(function() {
-
-			var id = $(this).attr('id');
-			var offset = $(this).offset();
+			var $this = $(this);
+			var id = $this.attr('id');
+			var offset = $this.offset();
 			var left = offset.left;
 
-
-			if($(this).height() == 0) {
+			if ($this.height() == 0) {
 				var height = 30;
 			} else {
 				var height = $(this).height() + 5;
 			}
-			if($(this).width() == 0) {
+			if ($this.width() == 0) {
 				var width = 200;
 			} else {
-				var width = $(this).width() + 5;
+				var width = $this.width() + 5;
 			}
 
 			var top = offset.top + height;
 
-			document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
-			
+			//document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
+			var $suggestions = $('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"/>');
+			$($this).after($suggestions);
+
 			$(this).keyup(function() {
-				if($('#'+id).val().length >= o.minLength) {
+				if ($('#'+id).val().length >= o.minLength) {
 					$.ajax({
 						url: $('#'+id).attr('rel'),
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
-							if(data.length > 0) {
+							if (data.length > 0) {
+								/*
 								var ret = '';
 								var pairs = data.split('|');
 								for(var i in pairs){
 									ret += '<a href="javascript: void(0);" onclick="$(\'#'+id+'\').val(\''+pairs[i]+'\'); $(\'#autosuggest_'+id+'\').hide();">'+pairs[i]+'</a>';
 								}
+								$('#autosuggest_'+id).html(ret).show();
+								*/
+								var ret = $.fn.autosuggest.parse(data);
 								$('#autosuggest_'+id).html(ret).show();
 							} else {
 								$('#autosuggest_'+id).hide();
@@ -90,5 +98,10 @@
 		});
 	};
 
-})(jQuery);
+	$.fn.autosuggest.parse = function(data) {
+		console.debug(data);
+		return data;
+	};
+
+})(jQuery || $);
 
