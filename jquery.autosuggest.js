@@ -38,8 +38,11 @@
 			'parse'     : function(data) {
 								console.debug('parse:',data);
 								return data;
-			              },
-			'onSelect'  : null
+						  },
+			'onSelect'  : function(data) {
+								console.debug('selected:', data);
+								return data;
+						  }
 		}, options);
 
 		var o = settings;
@@ -77,14 +80,14 @@
 			$(this).keyup(function() {
 				if ($('#'+id).val().length >= o.minLength) {
 					$.ajax({
-						url: $('#'+id).attr('rel'),
+						url: $('#'+id).data('url'),
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
 							if (data.length > 0) {
 								var ret = o.parse(data);
 								$('#autosuggest_'+id).html(ret).show();
 							} else {
-								$('#autosuggest_'+id).hide();
+								$('#autosuggest_'+id).hide().off('click.autosuggest');
 							}
 						}
 					});
