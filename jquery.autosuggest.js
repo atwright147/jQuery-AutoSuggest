@@ -34,7 +34,12 @@
 		var settings = $.extend({
 			'minLength' : 3,
 			'restful'   : true,
-			'dataType'  : null  // intelegent auto-guess 
+			'dataType'  : null,  // intelligent auto-guess 
+			'parse'     : function(data) {
+								console.debug('parse:',data);
+								return data;
+			              },
+			'onSelect'  : null
 		}, options);
 
 		var o = settings;
@@ -66,7 +71,7 @@
 			var top = offset.top + height;
 
 			//document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
-			var $suggestions = $('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"/>');
+			var $suggestions = $('<div class="autosuggest-suggestions" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"/>');
 			$($this).after($suggestions);
 
 			$(this).keyup(function() {
@@ -76,15 +81,7 @@
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
 							if (data.length > 0) {
-								/*
-								var ret = '';
-								var pairs = data.split('|');
-								for(var i in pairs){
-									ret += '<a href="javascript: void(0);" onclick="$(\'#'+id+'\').val(\''+pairs[i]+'\'); $(\'#autosuggest_'+id+'\').hide();">'+pairs[i]+'</a>';
-								}
-								$('#autosuggest_'+id).html(ret).show();
-								*/
-								var ret = $.fn.autosuggest.parse(data);
+								var ret = o.parse(data);
 								$('#autosuggest_'+id).html(ret).show();
 							} else {
 								$('#autosuggest_'+id).hide();
@@ -96,11 +93,6 @@
 				}
 			});
 		});
-	};
-
-	$.fn.autosuggest.parse = function(data) {
-		console.debug(data);
-		return data;
 	};
 
 })(jQuery || $);
