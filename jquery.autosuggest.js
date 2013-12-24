@@ -79,18 +79,29 @@
 
 			$(this).keyup(function() {
 				if ($('#'+id).val().length >= o.minLength) {
+					var query = $('#'+id).val();
+					var url = $('#'+id).data('url');
+					if (o.restful && url.substring(url.length-1) == "/") {
+						console.debug(o.restful);
+						url = url.substring(0, url.length-1) + '/' + query;
+					}
+					if ( ! o.restful) {
+						//url = url + query;
+					}
 					$.ajax({
-						url: $('#'+id).data('url'),
+						url: url,
+						//dataType: 'json',
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
 							if (data.length > 0) {
+								var status = true;
 								var ret = o.parse(data);
 								$('#autosuggest_'+id).html(ret).show();
 							} else {
 								$('#autosuggest_'+id).hide().off('click.autosuggest');
 							}
 						}
-					});
+      				});
 				} else {
 					$('#autosuggest_'+id).hide();
 				}
