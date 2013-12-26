@@ -39,6 +39,16 @@
 								console.debug('parse:',data);
 								return data;
 						  },
+			'template'  : function(data) {
+								var $out = $('<ul/>');
+								$.map(data, function(item,i) {
+									$out.append('<li data-id="'+item.id+'">'+item.suggestion+'</li>');
+								});
+								return $out;
+						  },
+			'setupSelect'  : function() {
+								console.debug('setup:', this);
+						  },
 			'onSelect'  : function(data) {
 								console.debug('selected:', data);
 								return data;
@@ -83,7 +93,8 @@
 					var url = $('#'+id).data('url');
 					if (o.restful && url.substring(url.length-1) == "/") {
 						console.debug(o.restful);
-						url = url.substring(0, url.length-1) + '/' + query;
+						//url = url.substring(0, url.length-1) + '/' + query;
+						url = url.substring(0, url.length-1);
 					}
 					if ( ! o.restful) {
 						//url = url + query;
@@ -95,7 +106,7 @@
 						success: function(data) {
 							if (data.length > 0) {
 								var status = true;
-								var ret = o.parse(data);
+								var ret = o.template(o.parse(data));
 								$('#autosuggest_'+id).html(ret).show();
 							} else {
 								$('#autosuggest_'+id).hide().off('click.autosuggest');

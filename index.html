@@ -13,11 +13,16 @@
 	<script>
 		$('.autosuggest').autosuggest({
 			parse: function(data) {
-				var $out = $('<ul/>');
-				$.map(data, function(v,i) {
-					$out.append('<li data-id="'+v.id+'">'+v.email+'</li>');
+				var out = [];
+				console.debug('raw:',data);
+				console.debug('out:',out);
+
+				$.map(data, function(item,i) {
+					out.push({"id":item.id, "suggestion":item.username + ' (' + item.email + ')'});
 				});
-				return $out;
+
+				console.debug('out:',out);
+				return out;
 			},
 			onSelect: function(data) {
 				console.log(data.data('id'));
