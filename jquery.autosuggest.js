@@ -33,6 +33,7 @@
 		// Create some defaults, extending them with any options that were provided
 		var settings = $.extend({
 			'minLength' : 3,
+			'selector'  : 'li',
 			'restful'   : true,
 			'dataType'  : null,  // intelligent auto-guess 
 			'parse'     : function(data) {
@@ -46,12 +47,9 @@
 								});
 								return $out;
 						  },
-			'setupSelect'  : function() {
-								console.debug('setup:', this);
-						  },
-			'onSelect'  : function(data) {
-								console.debug('selected:', data);
-								return data;
+			'onSelect'  : function(el) {
+								console.debug('selected:', el);
+								return el;
 						  }
 		}, options);
 
@@ -63,6 +61,10 @@
 			console.info('selector:', this);
 			console.info('options:', o);
 		console.groupEnd();
+
+		$(document).on('autosuggestChange', function(event) {
+			return o.onSelect(event);
+		});
 
 		return this.each(function() {
 			var $this = $(this);
@@ -107,7 +109,12 @@
 							if (data.length > 0) {
 								var status = true;
 								var ret = o.template(o.parse(data));
-								$('#autosuggest_'+id).html(ret).show();
+								$('#autosuggest_'+id).html(ret).show().on('click.autosuggest', 'li', function() {
+									$.event.trigger({
+										type: 'autosuggestChange',
+										time: new Date()
+									});
+								});
 							} else {
 								$('#autosuggest_'+id).hide().off('click.autosuggest');
 							}

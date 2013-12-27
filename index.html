@@ -23,12 +23,6 @@
 
 				console.debug('out:',out);
 				return out;
-			},
-			onSelect: function(data) {
-				console.log(data.data('id'));
-				data.on('click.autosuggest', 'li', function() {
-					o.onSelect.call(this, $(this));
-				});
 			}
 		});
 	</script>
