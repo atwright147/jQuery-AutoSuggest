@@ -48,8 +48,12 @@
 								return $out;
 						  },
 			'onSelect'  : function(el) {
-								console.debug('selected:', el);
-								return el;
+								$.event.trigger({
+									type: 'autosuggest.selection',
+									value: $(el).data('id')
+								});
+								console.info($(el).data('id'));
+								//return $(el).data('id');
 						  }
 		}, options);
 
@@ -61,10 +65,6 @@
 			console.info('selector:', this);
 			console.info('options:', o);
 		console.groupEnd();
-
-		$(document).on('autosuggestChange', function(event) {
-			return o.onSelect(event);
-		});
 
 		return this.each(function() {
 			var $this = $(this);
@@ -85,16 +85,16 @@
 
 			var top = offset.top + height;
 
-			//document.write('<div class="autosuggest" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"></div>');
 			var $suggestions = $('<div class="autosuggest-suggestions" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"/>');
 			$($this).after($suggestions);
 
+			var n = 1;
 			$(this).keyup(function() {
 				if ($('#'+id).val().length >= o.minLength) {
 					var query = $('#'+id).val();
 					var url = $('#'+id).data('url');
 					if (o.restful && url.substring(url.length-1) == "/") {
-						console.debug(o.restful);
+						//console.debug(o.restful);
 						//url = url.substring(0, url.length-1) + '/' + query;
 						url = url.substring(0, url.length-1);
 					}
@@ -106,26 +106,24 @@
 						//dataType: 'json',
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
+							console.info(n);
 							if (data.length > 0) {
-								var status = true;
 								var ret = o.template(o.parse(data));
-								$('#autosuggest_'+id).html(ret).show().on('click.autosuggest', 'li', function() {
-									$.event.trigger({
-										type: 'autosuggestChange',
-										time: new Date()
-									});
+								$('#autosuggest_'+id).html(ret).show();
+								$('#autosuggest_'+id).off('click.autosuggest').on('click.autosuggest', o.selector, function() {
+									return o.onSelect(this);
 								});
 							} else {
-								$('#autosuggest_'+id).hide().off('click.autosuggest');
+								$('#autosuggest_'+id).hide().off('click.autosuggest', o.selector);
 							}
+							n++;
 						}
       				});
 				} else {
-					$('#autosuggest_'+id).hide();
+					$('#autosuggest_'+id).hide().off('click.autosuggest');
 				}
 			});
 		});
 	};
 
 })(jQuery || $);
-
