@@ -16,8 +16,8 @@
  */
 
 /*!
-* jQuery Plugin vX.X
-* https://github.com/atwright147/jquery.plugin-name
+* jQuery AutoSuggest v0
+* https://github.com/atwright147/jQuery.AutoSuggest
 *
 * Copyright 2012, Andy Wright
 * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -49,7 +49,7 @@
 						  },
 			'onSelect'  : function(el) {
 								$.event.trigger({
-									type: 'autosuggest.selection',
+									type: 'autosuggest:selection',
 									value: $(el).data('id')
 								});
 								console.info($(el).data('id'));
@@ -85,7 +85,7 @@
 
 			var top = offset.top + height;
 
-			var $suggestions = $('<div class="autosuggest-suggestions" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; width: '+width+'px; display: none;"/>');
+			var $suggestions = $('<div class="autosuggest-suggestions" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; min-width: '+width+'px; display: none;"/>');
 			$($this).after($suggestions);
 
 			var n = 1;

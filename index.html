@@ -3,10 +3,42 @@
 <head>
 	<meta charset="UTF-8">
 	<title>AutoSuggest Demo</title>
+	<style>
+		html, body {
+			width:   100%;
+			height:  100%;
+			margin:  0;
+			padding: 0;
+		}
+		body {
+			font-family: Arial, Helvetica, san-serif;
+			font-size: .8em;
+		}
+		.autosuggest-suggestions {
+			border: 1px solid #ccc;
+		}
+		.autosuggest-suggestions ul {
+			list-style-type: none;
+			padding-left: 0;
+			margin: 0 inherit;
+		}
+		.autosuggest-suggestions li {
+			cursor: pointer;
+			padding: 5px;
+		}
+		.autosuggest-suggestions li:hover {
+			background-color: #ccc;
+		}
+
+	</style>
 </head>
 <body>
-	<input type="text" id="test1" class="autosuggest" data-url="data.json">
-	<input type="text" id="test2" class="autosuggest" data-url="http://stubr.co/api/as/users/">
+	<form action="">
+		<label for="test1">Test #1:</label>
+			<input type="text" id="test1" class="autosuggest" data-url="data.json"><br>
+		<label for="test1">Test #2:</label>
+			<input type="text" id="test2" class="autosuggest" data-url="http://stubr.co/api/as/users/">
+	</form>
 	
 	<!--<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>-->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -21,7 +53,7 @@
 				return out;
 			}
 		});
-		$(document).on('autosuggest.selection', function(e) {
+		$(document).on('autosuggest:selection', function(e) {
 			console.info(e);
 			alert(e.value);
 		});
