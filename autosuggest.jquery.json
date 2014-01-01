@@ -1,0 +1,31 @@
+{
+	"name": "AutoSuggest",
+	"title": "jQuery AutoSuggest",
+	"description": "A simple auto-complete or auto-suggest plugin.",
+	"keywords": [
+		"jquery",
+		"auto-suggest",
+		"auto-complete",
+		"suggestions",
+		"ajax",
+		"plugins"
+	],
+	"version": "0.1",
+	"author": {
+		"name": "Andy Wright",
+		"url": "https://github.com/atwright147"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://www.opensource.org/licenses/mit-license.php"
+		}
+	],
+	"bugs": "https://github.com/atwright147/jQuery-AutoSuggest/issues",
+	"homepage": "https://github.com/atwright147/jQuery-AutoSuggest",
+	"docs": "https://github.com/atwright147/jQuery-AutoSuggest#readme",
+	"download": "https://github.com/atwright147/jQuery-AutoSuggest/archive/master.zip",
+	"dependencies": {
+		"jquery": ">=1.4"
+	}
+}
