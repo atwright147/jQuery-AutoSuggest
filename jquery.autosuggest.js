@@ -91,7 +91,6 @@
 						//dataType: 'json',
 						//data: {q: $('#'+id).val()},  // TODO: make into an option
 						success: function(data) {
-							console.info(n);
 							if (data.length > 0) {
 								var ret = o.template(o.parse(data));
 								$('#autosuggest_'+id).html(ret).show();
