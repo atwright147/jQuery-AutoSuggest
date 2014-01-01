@@ -58,13 +58,6 @@
 		}, options);
 
 		var o = settings;
-		//console.debug(settings);
-
-		console.groupCollapsed('Init');
-			console.info('autosuggest started');
-			console.info('selector:', this);
-			console.info('options:', o);
-		console.groupEnd();
 
 		return this.each(function() {
 			var $this = $(this);
@@ -72,16 +65,8 @@
 			var offset = $this.offset();
 			var left = offset.left;
 
-			if ($this.height() == 0) {
-				var height = 30;
-			} else {
-				var height = $(this).height() + 5;
-			}
-			if ($this.width() == 0) {
-				var width = 200;
-			} else {
-				var width = $this.width() + 5;
-			}
+			if ($this.height() == 0) { var height = 30;  } else { var height = $(this).height() + 5; }
+			if ($this.width()  == 0) { var width  = 200; } else { var width  = $this.width() + 5; }
 
 			var top = offset.top + height;
 
