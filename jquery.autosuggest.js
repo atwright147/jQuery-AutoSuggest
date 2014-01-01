@@ -48,12 +48,13 @@
 								return $out;
 						  },
 			'onSelect'  : function(el) {
+								var $el = $(el);
+								var selected_id = $el.data('id');
+								console.info(selected_id);
 								$.event.trigger({
 									type: 'autosuggest:selection',
-									value: $(el).data('id')
+									value: selected_id
 								});
-								console.info($(el).data('id'));
-								//return $(el).data('id');
 						  }
 		}, options);
 
@@ -61,6 +62,7 @@
 
 		return this.each(function() {
 			var $this = $(this);
+			console.log($this);
 			var id = $this.attr('id');
 			var offset = $this.offset();
 			var left = offset.left;
@@ -73,7 +75,6 @@
 			var $suggestions = $('<div class="autosuggest-suggestions" id="autosuggest_'+id+'" style="position: absolute; left: '+left+'px; top: '+top+'px; min-width: '+width+'px; display: none;"/>');
 			$($this).after($suggestions);
 
-			var n = 1;
 			$(this).keyup(function() {
 				if ($('#'+id).val().length >= o.minLength) {
 					var query = $('#'+id).val();
@@ -94,13 +95,12 @@
 							if (data.length > 0) {
 								var ret = o.template(o.parse(data));
 								$('#autosuggest_'+id).html(ret).show();
-								$('#autosuggest_'+id).off('click.autosuggest').on('click.autosuggest', o.selector, function() {
+								$('#autosuggest_'+id).off('click.autosuggest').on('click.autosuggest', o.selector, function(e) {
 									return o.onSelect(this);
 								});
 							} else {
 								$('#autosuggest_'+id).hide().off('click.autosuggest', o.selector);
 							}
-							n++;
 						}
       				});
 				} else {
