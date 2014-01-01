@@ -55,6 +55,7 @@
 									type: 'autosuggest:selection',
 									value: selected_id
 								});
+								$el.parents('div').empty().hide();
 						  }
 		}, options);
 
